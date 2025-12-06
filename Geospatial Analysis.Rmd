@@ -24,7 +24,7 @@ inspections <- read_csv("data/inspections_clean.csv")
 
 bos_insp <- inspections |>
   filter(city_source == "Boston")
-bos <- st_read("Boston Shapefiles/ZIP_Codes.shp")
+bos <- st_read("data/Boston Shapefiles/ZIP_Codes.shp")
 
 bos_borders <- bos |> st_union() |>
   st_buffer(.5)
@@ -45,6 +45,13 @@ bos_joined <- left_join(bos, rstnt_density, by = "zip_code")
 
 ggplot(bos_borders) +
   geom_sf(data=bos_joined, aes(fill = n_restaurants))
+
+
+airport <- east_boston |>
+  filter(address_full == "100   LOGAN AIRPORT TRMNL A")
+
+st_crs(bos)
+
 ```
 
 ## Analysis
@@ -64,12 +71,15 @@ specific and see what the restaurant hotspots are in the city.
 
 bos_insp <- inspections |>
   filter(city_source == "Boston")
-bos <- st_read("Boston Shapefiles/ZIP_Codes.shp")
+bos <- st_read("data/Boston Shapefiles/ZIP_Codes.shp")
 
 bos_borders <- bos |> st_union() |>
   st_buffer(.5)
 
 ###### ^^^^ Upload Shapefiles (same as EDA) ######
+
+
+# Condense relevant data and reformat latitude and longitude. Airport restaurant coordinates seem to have been recorded wrong (showing up in atlantic ocean). Filter them out.
 
 
 ind_rsts <- bos_insp |>
