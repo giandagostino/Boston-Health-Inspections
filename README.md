@@ -1,6 +1,6 @@
 # Boston-Health-Inspections
 
-Using data gathered from the City of Boston (Health inspection records and shapefiles), I've created geospatial visualizations of the city and assessed significance of restaurant density (whether the restaurant is in an urban or suburban area) in relation to health inspection records. The health inspection records span from 2008-2025.
+Using data gathered from the City of Boston, I've created geospatial visualizations of the city and assessed significance of restaurant density (whether the restaurant is in an urban or suburban area) in relation to health inspection records. The health inspection records span from 2008-2025.
 
 ## Results:
 
