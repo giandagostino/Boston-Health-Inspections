@@ -46,12 +46,6 @@ bos_joined <- left_join(bos, rstnt_density, by = "zip_code")
 ggplot(bos_borders) +
   geom_sf(data=bos_joined, aes(fill = n_restaurants))
 
-
-airport <- east_boston |>
-  filter(address_full == "100   LOGAN AIRPORT TRMNL A")
-
-st_crs(bos)
-
 ```
 
 ## Analysis
@@ -171,8 +165,6 @@ ind_rsts <- ind_rsts |>
 
 ind_rsts <- st_as_sf(ind_rsts, coords = c("lon", "lat"), crs = 4326)
 
-mean(ind_rsts$urban_yn)
-hist(ind_rsts$n_neighbor)
 
 # Now lets plot all of the restaurants with their new designations
 
@@ -243,7 +235,7 @@ Test for independence. These are the assumptions:
 -   Both Urban/Suburban status and Pass/Fail reports must be categorical
     variables with 2+ distinct groups
 
--   Categories withineach designation must be mutually exclusive.
+-   Categories within each designation must be mutually exclusive.
 
 -   Each health inspection report must be independent of the others.
 
@@ -275,29 +267,8 @@ new_bos_insp <- new_bos_insp |>
     viol_status_num = as.numeric(viol_status)
   )
 
-model <- glm(viol_status ~ n_neighbor, data = new_bos_insp, family = binomial)
+model <- glm(viol_status_num ~ n_neighbor, data = new_bos_insp, family = binomial)
 
 
-grid <- tibble(
-  n_neighbor = seq(
-    min(new_bos_insp$n_neighbor),
-    max(new_bos_insp$n_neighbor),
-    length.out = 300
-  ))
-
-
-grid <- grid |>
-  mutate(
-    pred_prob = predict(model, newdata = grid, type = "response")
-  )
-
-  
-ggplot() +
-  geom_jitter(data = new_bos_insp,
-              aes(x = n_neighbor, y = viol_status_num),
-              height = 0.1, alpha = 0.2) +
-  geom_line(data = grid,
-            aes(x = n_neighbor, y = pred_prob),
-            linewidth = 1.2)
 
 ```
