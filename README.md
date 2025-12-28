@@ -4,7 +4,7 @@ Created using data from the City of Boston, I've created geospatial visualizatio
 
 ## Results:
 
-#### There is evidence to suggest that suburban restaurants tend to fail health inspections more often than urban restaurants, from Chi-Squared Test for independence, and logistic regression.
+#### There is evidence to suggest that suburban restaurants tend to fail health inspections more often than urban restaurants, from Chi-Squared Test for independence, and spline regression.
 
 ## Data Source (Analyze Boston):
 
