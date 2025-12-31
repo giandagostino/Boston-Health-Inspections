@@ -1,7 +1,7 @@
 ** Live geospatial analysis: **
 https://giandagostino.github.io/Boston-Health-Inspections/
 
-# "Boston Health Inspections: Geospatial Analysis"
+# Boston Health Inspections: Geospatial Analysis
 
 Created using data from the City of Boston, I've created geospatial visualizations of the city and assessed significance of restaurant density (whether the restaurant is in an urban or suburban area) in relation to health inspection records. The health inspection records span from 2008-2025.
 
