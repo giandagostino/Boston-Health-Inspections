@@ -13,7 +13,7 @@ Created using data from the City of Boston, I've created geospatial visualizatio
 - Spline regression shows the effect persists after accounting for spatial density
 
 
-## Data Source (Analyze Boston):
+## Data Source
 
 Zipcode Shapefiles - https://data.boston.gov/dataset/zip-codes \
 Health Inspection Records - https://data.boston.gov/dataset/food-establishment-inspections
