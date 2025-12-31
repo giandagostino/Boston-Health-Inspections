@@ -5,7 +5,7 @@ https://giandagostino.github.io/Boston-Health-Inspections/
 
 Created using data from the City of Boston, I've created geospatial visualizations of the city and assessed significance of restaurant density (whether the restaurant is in an urban or suburban area) in relation to health inspection records. The health inspection records span from 2008-2025.
 
-## Results:
+## Results
 
 #### Key Findings
 - Suburban restaurants have a higher failure rate than urban restaurants
