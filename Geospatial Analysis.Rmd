@@ -1,7 +1,9 @@
 ---
-title: "Geospatial Analysis"
-output: html_document
-date: "2025-12-06"
+title: "Boston Health Inspections: Geospatial Analysis"
+output:
+  html_document:
+    output_file: index.html
+date: "2025-12-31"
 editor_options: 
   markdown: 
     wrap: 72
@@ -198,6 +200,12 @@ this difference significant?
 
 #Expand individual restaurants and their urban/suburban designation to the full inspection report
 
+ind_rsts <- ind_rsts |>
+  mutate(
+    urban_bucket = (n_int - 1) >= 10
+  )
+
+
 new_bos_insp <- bos_insp |>
   left_join(
     ind_rsts |>
@@ -246,12 +254,12 @@ the categories are independent from each another. [We have evidence that
 Urban/Suburban designation and health inspection pass rates are
 dependent on one another.]{.underline}
 
-Now we want to know the specific relationship between Urban/Suburban
-designation and Pass/Fail rates, if any.
+Now let's try to visualize this trend by plotting all of the restaurants and their inspection pass rates.
 
-```{r logit}
+```{r regression}
 
-# Lets start by deconstructing the pass/fail rate into number of neighbor restaurants within a 100 meter radius, plotting the distribution
+summary(ind_rsts$n_neighbor)
+
 
 ggplot() +
   geom_histogram(data = ind_rsts, aes(x=n_neighbor), bins=39) +
@@ -259,16 +267,66 @@ ggplot() +
        x = "Number of Neighbors",
        y = "Frequency")
 
-# This distribiution is unimodal and smooth. Let's see if we can fit a logistic regression to this.
 
-new_bos_insp <- new_bos_insp |>
-  mutate(
-    viol_status = viol_status == "Fail",
-    viol_status_num = as.numeric(viol_status)
+vln_data <- bos_insp |>
+  drop_na(viol_status) |>
+  mutate(viol_status = if_else(viol_status == "Pass", 1, 0)) |>
+  group_by(address_full) |>
+  summarize(
+    pass_rate = mean(viol_status),
+    n_inspections = n()
   )
 
-model <- glm(viol_status_num ~ n_neighbor, data = new_bos_insp, family = binomial)
+
+# join and add log transform because the distribution of n_inspections shows exponential decay
+
+vln_join <- inner_join(ind_rsts, vln_data, by = "address_full") |>
+  mutate(
+    log_n_inspections = log(n_inspections),
+    trans_n_neighbor = sqrt(n_neighbor)
+  )
 
 
+ggplot(data = vln_join, aes(x = n_neighbor, y = pass_rate)) +
+  geom_point(aes(color = log_n_inspections)) +
+  geom_smooth(method = "gam",
+              formula = y ~ s(x, k = 50),
+              se = TRUE,
+              fill = "lightgreen",
+              alpha = 0.6,
+              color = "red2") +
+  labs(
+    title = "Relationship Between Neighbors and Pass Rate",
+    x = "Number of neighbors",
+    y = "Pass Rate",
+    color = "Inspections Per\nRestaurant"
+  ) +
+  scale_color_gradient(
+    breaks = c(0,
+               2,
+               4,
+               6,
+               8),
+    labels = c("1",
+               "7",
+               "55",
+               "400",
+               "3000")
+  )
 
 ```
+
+This graph corroborates the information we found from the Chi-Squared
+test. There is a slight positive trend between the number of neighbors
+and the pass rate for health inspections, seen by the positive trend of
+the spline. Though slight, we are very confident that this trend exists,
+seen by the skinniness of the green prediction band. The band gets
+larger as the number of neighbors increases, but the standard error
+never exceeds 2.5%. The amount of inspections each restaurant has had
+total never does not seem to differ with number of neighbors, but does
+differ slightly by pass rate. The larger the number of inspections a
+restaurants has, the more they tend to hover around a 50% pass rate.
+
+
+
+
