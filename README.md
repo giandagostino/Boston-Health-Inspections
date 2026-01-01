@@ -18,7 +18,10 @@ Created using data from the City of Boston, I've created geospatial visualizatio
 - Restaurant location is an important correlary to health inspection outcomes, however this difference is small.
 - The City Health Division should not necessarily use this association as a primary driver of policy or resource allocation decisions, but should keep it in mind when auditing health inspection procedures and training inspectors across different geographic contexts.
 
-## Images
+## Visualizations
+
+![Restaurant density map](plots/density.png)
+![Spline Regression PLot](plots/spline.png)
 
 ## Data Source
 
